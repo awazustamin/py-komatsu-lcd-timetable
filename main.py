@@ -72,8 +72,24 @@ def main():
         #3段目種別の図形の枠
         pygame.draw.rect(canvas, (0, 176, 80), (3, 409, 236, 129))
 
+        #方面を表示するところの図形
+        pygame.draw.rect(canvas, (53, 58, 65), (0, 540, 1920, 102))
+
+        #種別等が書いてあるところのバーの図形
+        pygame.draw.rect(canvas, (53, 58, 65), (0, 644, 1920, 32))
+
         #フォント設定
         main_font = pygame.font.SysFont(FONT_NAME, 80, bold=False)
+        rosen1 = pygame.font.SysFont(FONT_NAME, 68, bold=False)
+        syousai = pygame.font.SysFont(FONT_NAME, 19, bold=False)
+
+        #路線名
+        rosen = rosen1.render("IRいしかわ鉄道線", True, COLOR_TEXT)
+        canvas.blit(rosen, (53, 7))
+
+        #方面
+        houmen = rosen1.render("加賀温泉・福井方面", True, COLOR_TEXT)
+        canvas.blit(houmen, (961, 7))
 
         #1段目種別
         text_surf1 = main_font.render("普通", True, COLOR_TEXT)
