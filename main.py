@@ -66,7 +66,7 @@ def main():
         #2段目種別の図形の枠
         pygame.draw.rect(canvas, (0, 176, 80), (3, 274, 236, 129))
 
-        #3段目種別の図形
+        #3段目種別の図形                            -1  +1   +2   +2
         pygame.draw.rect(canvas, (255, 255, 255), (0, 406, 242, 135))
 
         #3段目種別の図形の枠
@@ -77,6 +77,24 @@ def main():
 
         #種別等が書いてあるところのバーの図形
         pygame.draw.rect(canvas, (53, 58, 65), (0, 644, 1920, 32))
+
+        #4段目種別の図形
+        pygame.draw.rect(canvas, (255, 255, 255), (0, 677, 242, 135))
+
+        #4段目種別の図形の枠
+        pygame.draw.rect(canvas, (0, 176, 80), (3, 680, 236, 129))
+
+        #5段目種別の図形
+        pygame.draw.rect(canvas, (255, 255, 255), (0, 812, 242, 135))
+
+        #5段目種別の図形の枠
+        pygame.draw.rect(canvas, (0, 176, 80), (3, 815, 236, 129))
+
+        #6段目種別の図形
+        pygame.draw.rect(canvas, (255, 255, 255), (0, 947, 242, 135))
+
+        #6段目種別の図形の枠
+        pygame.draw.rect(canvas, (0, 176, 80), (3, 950, 236, 129))
 
         #フォント設定
         main_font = pygame.font.SysFont(FONT_NAME, 80, bold=False)
@@ -127,6 +145,18 @@ def main():
         #3段目種別
         text_surf3 = main_font.render("普通", True, COLOR_TEXT)
         canvas.blit(text_surf3, (121 - text_surf3.get_width() // 2, 473 - text_surf3.get_height() // 2))
+
+        #4段目種別
+        text_surf4 = main_font.render("普通", True, COLOR_TEXT)
+        canvas.blit(text_surf4, (121 - text_surf4.get_width() // 2, 744 - text_surf4.get_height() // 2))
+
+        #5段目種別
+        text_surf5 = main_font.render("普通", True, COLOR_TEXT)
+        canvas.blit(text_surf5, (121 - text_surf5.get_width() // 2, 879 - text_surf5.get_height() // 2))
+
+        #6段目種別
+        text_surf6 = main_font.render("普通", True, COLOR_TEXT)
+        canvas.blit(text_surf6, (121 - text_surf6.get_width() // 2, 1014 - text_surf6.get_height() // 2))
 
         #ケーリングと画面更新
         #キャンバスを現在のウィンドウサイズに合わせて転送
