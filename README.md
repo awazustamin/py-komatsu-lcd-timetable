@@ -1,0 +1,2 @@
+# komatsu-station_lcd-timetable_python
+小松駅改札内中2階LCD発車標をPythonで再現
