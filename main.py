@@ -23,7 +23,7 @@ def main():
     #初期ウィンドウとキャンバスの準備
     current_w = int(BASE_RES[0] * INITIAL_SCALE)
     screen, win_size = setup_display(current_w)
-    pygame.display.set_caption("Station Departure Board")
+    pygame.display.set_caption("")
 
     canvas = pygame.Surface(BASE_RES)
     
