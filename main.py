@@ -48,6 +48,12 @@ def main():
         
         #pygame.draw.rect(描画先, 色, (x, y, 幅, 高さ))
 
+        #方面を表示するところの図形
+        pygame.draw.rect(canvas, (53, 58, 65), (0, 0, 1920, 102))
+
+        #種別等が書いてあるところのバーの図形
+        pygame.draw.rect(canvas, (53, 58, 65), (0, 104, 1920, 32))
+
         #1段目種別の図形
         pygame.draw.rect(canvas, (255, 255, 255), (0, 136, 242, 135))
 
