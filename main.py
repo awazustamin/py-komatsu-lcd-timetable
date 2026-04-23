@@ -85,36 +85,36 @@ def main():
 
         #路線名
         rosen = rosen1.render("IRいしかわ鉄道線", True, COLOR_TEXT)
-        canvas.blit(rosen, (53, 7))
-        canvas.blit(rosen, (53, 547))
+        canvas.blit(rosen, (53, 51 - rosen.get_height() // 2))
+        canvas.blit(rosen, (53, 591 - rosen.get_height() // 2))
 
         #方面
         houmen = rosen1.render("加賀温泉・福井方面", True, COLOR_TEXT)
-        canvas.blit(houmen, (961, 7))
+        canvas.blit(houmen, (961, 51 - rosen.get_height() // 2))
 
         houmen1 = rosen1.render("松任・金沢方面", True, COLOR_TEXT)
-        canvas.blit(houmen1, (961, 547))
+        canvas.blit(houmen1, (961, 591 - rosen.get_height() // 2))
 
         #詳細
         syubetsu = syousai.render("種別", True, COLOR_TEXT)
-        canvas.blit(syubetsu, (101, 107))
-        canvas.blit(syubetsu, (101, 647))
+        canvas.blit(syubetsu, (117 - syubetsu.get_width() // 2, 120 - syubetsu.get_height() // 2))
+        canvas.blit(syubetsu, (101, 660 - syubetsu.get_height() // 2))
 
         delay = syousai.render("列車名／遅れ", True, COLOR_TEXT)
-        canvas.blit(delay, (541, 107))
-        canvas.blit(delay, (541, 647))
+        canvas.blit(delay, (598 - delay.get_width() // 2, 120 - delay.get_height() // 2))
+        canvas.blit(delay, (541, 660 - delay.get_height() // 2))
 
-        delay = syousai.render("時刻", True, COLOR_TEXT)
-        canvas.blit(delay, (1144, 107))
-        canvas.blit(delay, (1144, 647))
+        time = syousai.render("時刻", True, COLOR_TEXT)
+        canvas.blit(time, (1162 - time.get_width() // 2, 120 - time.get_height() // 2))
+        canvas.blit(time, (1144, 660 - time.get_height() // 2))
 
-        delay = syousai.render("行先", True, COLOR_TEXT)
-        canvas.blit(delay, (1492, 107))
-        canvas.blit(delay, (1492, 647))
+        yukisaki = syousai.render("行先", True, COLOR_TEXT)
+        canvas.blit(yukisaki, (1511 - yukisaki.get_width() // 2, 120 - yukisaki.get_height() // 2))
+        canvas.blit(yukisaki, (1492, 660 - yukisaki.get_height() // 2))
 
-        delay = syousai.render("のりば", True, COLOR_TEXT)
-        canvas.blit(delay, (1796, 107))
-        canvas.blit(delay, (1796, 647))
+        platform = syousai.render("のりば", True, COLOR_TEXT)
+        canvas.blit(platform, (1826 - platform.get_width() // 2, 120 - platform.get_height() // 2))
+        canvas.blit(platform, (1796, 660 - platform.get_height() // 2))
 
         #1段目種別
         text_surf1 = main_font.render("普通", True, COLOR_TEXT)
