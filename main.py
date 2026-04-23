@@ -86,10 +86,35 @@ def main():
         #路線名
         rosen = rosen1.render("IRいしかわ鉄道線", True, COLOR_TEXT)
         canvas.blit(rosen, (53, 7))
+        canvas.blit(rosen, (53, 547))
 
         #方面
         houmen = rosen1.render("加賀温泉・福井方面", True, COLOR_TEXT)
         canvas.blit(houmen, (961, 7))
+
+        houmen1 = rosen1.render("松任・金沢方面", True, COLOR_TEXT)
+        canvas.blit(houmen1, (961, 547))
+
+        #詳細
+        syubetsu = syousai.render("種別", True, COLOR_TEXT)
+        canvas.blit(syubetsu, (101, 107))
+        canvas.blit(syubetsu, (101, 647))
+
+        delay = syousai.render("列車名／遅れ", True, COLOR_TEXT)
+        canvas.blit(delay, (541, 107))
+        canvas.blit(delay, (541, 647))
+
+        delay = syousai.render("時刻", True, COLOR_TEXT)
+        canvas.blit(delay, (1144, 107))
+        canvas.blit(delay, (1144, 647))
+
+        delay = syousai.render("行先", True, COLOR_TEXT)
+        canvas.blit(delay, (1492, 107))
+        canvas.blit(delay, (1492, 647))
+
+        delay = syousai.render("のりば", True, COLOR_TEXT)
+        canvas.blit(delay, (1796, 107))
+        canvas.blit(delay, (1796, 647))
 
         #1段目種別
         text_surf1 = main_font.render("普通", True, COLOR_TEXT)
