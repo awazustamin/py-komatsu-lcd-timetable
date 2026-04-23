@@ -130,7 +130,7 @@ def main():
 
         #ケーリングと画面更新
         #キャンバスを現在のウィンドウサイズに合わせて転送
-        scaled_frame = pygame.transform.scale(canvas, win_size)
+        scaled_frame = pygame.transform.smoothscale(canvas, win_size)
         screen.blit(scaled_frame, (0, 0))
         
         pygame.display.flip()
