@@ -44,7 +44,7 @@ def main():
 
         #日英文面の定義
         if is_japanese:
-            txt_syubetsu = "普通"
+            txt_local = "普通"
             txt_rosen = "IRいしかわ鉄道線"
             txt_houmen1 = "加賀温泉・福井方面"
             txt_houmen2 = "松任・金沢方面"
@@ -54,7 +54,7 @@ def main():
             txt_destination = "行先"
             txt_platform = "のりば"
         else:
-            txt_syubetsu = "Local"
+            txt_local = "Local"
             txt_rosen = "Ishikawa Railway"
             txt_houmen1 = "for Kagaonsen, Fukui"
             txt_houmen2 = "for Mattō, Kanazawa"
@@ -171,27 +171,27 @@ def main():
         canvas.blit(platform, (1826 - platform.get_width() // 2, 660 - platform.get_height() // 2))
 
         #1段目種別
-        text_surf1 = main_font.render(txt_syubetsu, True, COLOR_TEXT)
+        text_surf1 = main_font.render(txt_local, True, COLOR_TEXT)
         canvas.blit(text_surf1, (121 - text_surf1.get_width() // 2, 203 - text_surf1.get_height() // 2))
 
         #2段目種別
-        text_surf2 = main_font.render(txt_syubetsu, True, COLOR_TEXT)
+        text_surf2 = main_font.render(txt_local, True, COLOR_TEXT)
         canvas.blit(text_surf2, (121 - text_surf2.get_width() // 2, 338 - text_surf2.get_height() // 2))
 
         #3段目種別
-        text_surf3 = main_font.render(txt_syubetsu, True, COLOR_TEXT)
+        text_surf3 = main_font.render(txt_local, True, COLOR_TEXT)
         canvas.blit(text_surf3, (121 - text_surf3.get_width() // 2, 473 - text_surf3.get_height() // 2))
 
         #4段目種別
-        text_surf4 = main_font.render(txt_syubetsu, True, COLOR_TEXT)
+        text_surf4 = main_font.render(txt_local, True, COLOR_TEXT)
         canvas.blit(text_surf4, (121 - text_surf4.get_width() // 2, 744 - text_surf4.get_height() // 2))
 
         #5段目種別
-        text_surf5 = main_font.render(txt_syubetsu, True, COLOR_TEXT)
+        text_surf5 = main_font.render(txt_local, True, COLOR_TEXT)
         canvas.blit(text_surf5, (121 - text_surf5.get_width() // 2, 879 - text_surf5.get_height() // 2))
 
         #6段目種別
-        text_surf6 = main_font.render(txt_syubetsu, True, COLOR_TEXT)
+        text_surf6 = main_font.render(txt_local, True, COLOR_TEXT)
         canvas.blit(text_surf6, (121 - text_surf6.get_width() // 2, 1014 - text_surf6.get_height() // 2))
 
         #ケーリングと画面更新
