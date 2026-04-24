@@ -1,3 +1,4 @@
+from time import sleep
 import pygame
 import sys
 
@@ -31,8 +32,43 @@ def main():
     title_font = pygame.font.SysFont(FONT_NAME, 80, bold=True)
     clock = pygame.time.Clock()
 
+    CYCLE_MS = 12000 
+    JP_DURATION = 8000
+
     #メインループ
     while True:
+
+        #現在のサイクル内の時間を計算
+        current_time = pygame.time.get_ticks() % CYCLE_MS
+        is_japanese = current_time < JP_DURATION
+
+        #日英文面の定義
+        if is_japanese:
+            txt_syubetsu = "普通"
+            txt_rosen = "IRいしかわ鉄道線"
+            txt_houmen1 = "加賀温泉・福井方面"
+            txt_houmen2 = "松任・金沢方面"
+            txt_type = "種別"
+            txt_delay = "列車名／遅れ"
+            txt_time = "時刻"
+            txt_destination = "行先"
+            txt_platform = "のりば"
+        else:
+            txt_syubetsu = "Local"
+            txt_rosen = "Ishikawa Railway"
+            txt_houmen1 = "for Kaga-Onsen, Fukui"
+            txt_houmen2 = "for Mattō, Kanazawa"
+            txt_type = "Type"
+            txt_delay = "Train Name/Delay"
+            txt_time = "Departure Time"
+            txt_destination = "Destination"
+            txt_platform = "Platform"
+
+
+
+        #種別の色定義
+        color_syubetsu = (0, 176, 80)
+
         #イベント処理
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -54,22 +90,22 @@ def main():
         #種別等が書いてあるところのバーの図形
         pygame.draw.rect(canvas, (53, 58, 65), (0, 104, 1920, 32))
 
-        #1段目種別の図形
+        #1段目種別の図形の枠
         pygame.draw.rect(canvas, (255, 255, 255), (0, 136, 242, 135))
 
-        #1段目種別の図形の枠
-        pygame.draw.rect(canvas, (0, 176, 80), (3, 139, 236, 129))
-
-        #2段目種別の図形
-        pygame.draw.rect(canvas, (255, 255, 255), (0, 271, 242, 135))
+        #1段目種別の図形
+        pygame.draw.rect(canvas, color_syubetsu, (3, 139, 236, 129))
 
         #2段目種別の図形の枠
-        pygame.draw.rect(canvas, (0, 176, 80), (3, 274, 236, 129))
+        pygame.draw.rect(canvas, (255, 255, 255), (0, 271, 242, 135))
 
-        #3段目種別の図形                            -1  +1   +2   +2
-        pygame.draw.rect(canvas, (255, 255, 255), (0, 406, 242, 135))
+        #2段目種別の図形
+        pygame.draw.rect(canvas, color_syubetsu, (3, 274, 236, 129))
 
         #3段目種別の図形の枠
+        pygame.draw.rect(canvas, (255, 255, 255), (0, 406, 242, 135))
+
+        #3段目種別の図形
         pygame.draw.rect(canvas, (0, 176, 80), (3, 409, 236, 129))
 
         #方面を表示するところの図形
@@ -78,23 +114,23 @@ def main():
         #種別等が書いてあるところのバーの図形
         pygame.draw.rect(canvas, (53, 58, 65), (0, 644, 1920, 32))
 
-        #4段目種別の図形
+        #4段目種別の図形の枠
         pygame.draw.rect(canvas, (255, 255, 255), (0, 677, 242, 135))
 
-        #4段目種別の図形の枠
-        pygame.draw.rect(canvas, (0, 176, 80), (3, 680, 236, 129))
-
-        #5段目種別の図形
-        pygame.draw.rect(canvas, (255, 255, 255), (0, 812, 242, 135))
+        #4段目種別の図形
+        pygame.draw.rect(canvas, color_syubetsu, (3, 680, 236, 129))
 
         #5段目種別の図形の枠
-        pygame.draw.rect(canvas, (0, 176, 80), (3, 815, 236, 129))
+        pygame.draw.rect(canvas, (255, 255, 255), (0, 812, 242, 135))
 
-        #6段目種別の図形
-        pygame.draw.rect(canvas, (255, 255, 255), (0, 947, 242, 135))
+        #5段目種別の図形
+        pygame.draw.rect(canvas, color_syubetsu, (3, 815, 236, 129))
 
         #6段目種別の図形の枠
-        pygame.draw.rect(canvas, (0, 176, 80), (3, 950, 236, 129))
+        pygame.draw.rect(canvas, (255, 255, 255), (0, 947, 242, 135))
+
+        #6段目種別の図形
+        pygame.draw.rect(canvas, color_syubetsu, (3, 950, 236, 129))
 
         #フォント設定
         main_font = pygame.font.SysFont(FONT_NAME, 80, bold=False)
@@ -102,60 +138,60 @@ def main():
         syousai = pygame.font.SysFont(FONT_NAME, 19, bold=False)
 
         #路線名
-        rosen = rosen1.render("IRいしかわ鉄道線", True, COLOR_TEXT)
+        rosen = rosen1.render(txt_rosen, True, COLOR_TEXT)
         canvas.blit(rosen, (53, 51 - rosen.get_height() // 2))
         canvas.blit(rosen, (53, 591 - rosen.get_height() // 2))
 
         #方面
-        houmen = rosen1.render("加賀温泉・福井方面", True, COLOR_TEXT)
+        houmen = rosen1.render(txt_houmen1, True, COLOR_TEXT)
         canvas.blit(houmen, (961, 51 - rosen.get_height() // 2))
 
-        houmen1 = rosen1.render("松任・金沢方面", True, COLOR_TEXT)
+        houmen1 = rosen1.render(txt_houmen2, True, COLOR_TEXT)
         canvas.blit(houmen1, (961, 591 - rosen.get_height() // 2))
 
         #詳細
-        syubetsu = syousai.render("種別", True, COLOR_TEXT)
-        canvas.blit(syubetsu, (117 - syubetsu.get_width() // 2, 120 - syubetsu.get_height() // 2))
-        canvas.blit(syubetsu, (101, 660 - syubetsu.get_height() // 2))
+        type = syousai.render(txt_time, True, COLOR_TEXT)
+        canvas.blit(type, (117 - type.get_width() // 2, 120 - type.get_height() // 2))
+        canvas.blit(type, (117 - type.get_width() // 2, 660 - type.get_height() // 2))
 
-        delay = syousai.render("列車名／遅れ", True, COLOR_TEXT)
+        delay = syousai.render(txt_delay, True, COLOR_TEXT)
         canvas.blit(delay, (598 - delay.get_width() // 2, 120 - delay.get_height() // 2))
-        canvas.blit(delay, (541, 660 - delay.get_height() // 2))
+        canvas.blit(delay, (598 - delay.get_width() // 2, 660 - delay.get_height() // 2))
 
-        time = syousai.render("時刻", True, COLOR_TEXT)
+        time = syousai.render(txt_time, True, COLOR_TEXT)
         canvas.blit(time, (1162 - time.get_width() // 2, 120 - time.get_height() // 2))
-        canvas.blit(time, (1144, 660 - time.get_height() // 2))
+        canvas.blit(time, (1162 - time.get_width() // 2, 660 - time.get_height() // 2))
 
-        yukisaki = syousai.render("行先", True, COLOR_TEXT)
+        yukisaki = syousai.render(txt_destination, True, COLOR_TEXT)
         canvas.blit(yukisaki, (1511 - yukisaki.get_width() // 2, 120 - yukisaki.get_height() // 2))
-        canvas.blit(yukisaki, (1492, 660 - yukisaki.get_height() // 2))
+        canvas.blit(yukisaki, (1511 - yukisaki.get_width() // 2, 660 - yukisaki.get_height() // 2))
 
-        platform = syousai.render("のりば", True, COLOR_TEXT)
+        platform = syousai.render(txt_platform, True, COLOR_TEXT)
         canvas.blit(platform, (1826 - platform.get_width() // 2, 120 - platform.get_height() // 2))
-        canvas.blit(platform, (1796, 660 - platform.get_height() // 2))
+        canvas.blit(platform, (1826 - platform.get_width() // 2, 660 - platform.get_height() // 2))
 
         #1段目種別
-        text_surf1 = main_font.render("普通", True, COLOR_TEXT)
+        text_surf1 = main_font.render(txt_syubetsu, True, COLOR_TEXT)
         canvas.blit(text_surf1, (121 - text_surf1.get_width() // 2, 203 - text_surf1.get_height() // 2))
 
         #2段目種別
-        text_surf2 = main_font.render("普通", True, COLOR_TEXT)
+        text_surf2 = main_font.render(txt_syubetsu, True, COLOR_TEXT)
         canvas.blit(text_surf2, (121 - text_surf2.get_width() // 2, 338 - text_surf2.get_height() // 2))
 
         #3段目種別
-        text_surf3 = main_font.render("普通", True, COLOR_TEXT)
+        text_surf3 = main_font.render(txt_syubetsu, True, COLOR_TEXT)
         canvas.blit(text_surf3, (121 - text_surf3.get_width() // 2, 473 - text_surf3.get_height() // 2))
 
         #4段目種別
-        text_surf4 = main_font.render("普通", True, COLOR_TEXT)
+        text_surf4 = main_font.render(txt_syubetsu, True, COLOR_TEXT)
         canvas.blit(text_surf4, (121 - text_surf4.get_width() // 2, 744 - text_surf4.get_height() // 2))
 
         #5段目種別
-        text_surf5 = main_font.render("普通", True, COLOR_TEXT)
+        text_surf5 = main_font.render(txt_syubetsu, True, COLOR_TEXT)
         canvas.blit(text_surf5, (121 - text_surf5.get_width() // 2, 879 - text_surf5.get_height() // 2))
 
         #6段目種別
-        text_surf6 = main_font.render("普通", True, COLOR_TEXT)
+        text_surf6 = main_font.render(txt_syubetsu, True, COLOR_TEXT)
         canvas.blit(text_surf6, (121 - text_surf6.get_width() // 2, 1014 - text_surf6.get_height() // 2))
 
         #ケーリングと画面更新
