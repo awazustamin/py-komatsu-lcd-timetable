@@ -56,7 +56,7 @@ def main():
         else:
             txt_syubetsu = "Local"
             txt_rosen = "Ishikawa Railway"
-            txt_houmen1 = "for Kaga-Onsen, Fukui"
+            txt_houmen1 = "for Kagaonsen, Fukui"
             txt_houmen2 = "for Mattō, Kanazawa"
             txt_type = "Type"
             txt_delay = "Train Name/Delay"
