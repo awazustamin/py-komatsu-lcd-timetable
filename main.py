@@ -10,6 +10,7 @@ FONT_NAME = "meiryo"
 #色の定義
 COLOR_BG = (0, 0, 0)
 COLOR_TEXT = (255, 255, 255)
+YELLOW_TEXT = (255, 253, 157)
 
 def setup_display(width):
     #横幅を基準に16:9のウィンドウを作成する
@@ -173,6 +174,10 @@ def main():
         #1段目種別
         text_surf1 = main_font.render(txt_local, True, COLOR_TEXT)
         canvas.blit(text_surf1, (121 - text_surf1.get_width() // 2, 203 - text_surf1.get_height() // 2))
+
+        #1段目時刻
+        text_time1 = main_font.render("16：53", True, YELLOW_TEXT)
+        canvas.blit(text_time1, (995, 203 - text_time1.get_height() // 2))
 
         #2段目種別
         text_surf2 = main_font.render(txt_local, True, COLOR_TEXT)
