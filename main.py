@@ -191,7 +191,7 @@ def main():
 
         #1段目のりば
         text_platform1 = main_font.render("3", True, YELLOW_TEXT)
-        canvas.blit(text_platform1, (1920 - text_destination1.get_width() // 2, 203 - text_destination1.get_height() // 2))
+        canvas.blit(text_platform1, (1825 - text_platform1.get_width() // 2, 203 - text_platform1.get_height() // 2))
 
         #2段目種別
         text_surf2 = main_font.render(txt_local, True, COLOR_TEXT)
@@ -207,7 +207,7 @@ def main():
 
         #2段目のりば
         text_platform2 = main_font.render("3", True, YELLOW_TEXT)
-        canvas.blit(text_platform2, (1920 - text_destination2.get_width() // 2, 338 - text_destination2.get_height() // 2))
+        canvas.blit(text_platform2, (1825 - text_platform2.get_width() // 2, 338 - text_platform2.get_height() // 2))
 
         #3段目種別
         text_surf3 = main_font.render(txt_local, True, COLOR_TEXT)
@@ -223,7 +223,7 @@ def main():
 
         #3段目のりば
         text_platform3 = main_font.render("3", True, YELLOW_TEXT)
-        canvas.blit(text_platform3, (1920 - text_destination3.get_width() // 2, 473 - text_destination3.get_height() // 2))
+        canvas.blit(text_platform3, (1825 - text_platform3.get_width() // 2, 473 - text_platform3.get_height() // 2))
 
         #4段目種別
         text_surf4 = main_font.render(txt_local, True, COLOR_TEXT)
@@ -239,7 +239,7 @@ def main():
 
         #4段目のりば
         text_platform4 = main_font.render("2", True, YELLOW_TEXT)
-        canvas.blit(text_platform4, (1920 - text_destination4.get_width() // 2, 744 - text_destination4.get_height() // 2))
+        canvas.blit(text_platform4, (1825 - text_platform4.get_width() // 2, 744 - text_platform4.get_height() // 2))
 
         #5段目種別
         text_surf5 = main_font.render(txt_local, True, COLOR_TEXT)
@@ -255,7 +255,7 @@ def main():
 
         #5段目のりば
         text_platform5 = main_font.render("1", True, YELLOW_TEXT)
-        canvas.blit(text_platform5, (1920 - text_destination5.get_width() // 2, 879 - text_destination5.get_height() // 2))
+        canvas.blit(text_platform5, (1825 - text_platform5.get_width() // 2, 879 - text_platform5.get_height() // 2))
 
         #6段目種別
         text_surf6 = main_font.render(txt_local, True, COLOR_TEXT)
@@ -271,7 +271,7 @@ def main():
 
         #6段目のりば
         text_platform6 = main_font.render("2", True, YELLOW_TEXT)
-        canvas.blit(text_platform6, (1920 - text_destination6.get_width() // 2, 1014 - text_destination6.get_height() // 2))
+        canvas.blit(text_platform6, (1825 - text_platform6.get_width() // 2, 1014 - text_platform6.get_height() // 2))
 
         #ケーリングと画面更新
         #キャンバスを現在のウィンドウサイズに合わせて転送
