@@ -55,6 +55,8 @@ def main():
             txt_time = "時刻"
             txt_destination = "行先"
             txt_platform = "のりば"
+            txt_kanazawa = "金　沢"
+            txt_fukui = "福　井"
         else:
             txt_local = "Local"
             txt_rapid = "Rapid"
@@ -66,6 +68,8 @@ def main():
             txt_time = "Departure Time"
             txt_destination = "Destination"
             txt_platform = "Platform"
+            txt_kanazawa = "Kanazawa"
+            txt_fukui = "Fukui"
 
 
 
@@ -166,8 +170,8 @@ def main():
         canvas.blit(time, (1162 - time.get_width() // 2, 660 - time.get_height() // 2))
 
         yukisaki = syousai.render(txt_destination, True, COLOR_TEXT)
-        canvas.blit(yukisaki, (1511 - yukisaki.get_width() // 2, 120 - yukisaki.get_height() // 2))
-        canvas.blit(yukisaki, (1511 - yukisaki.get_width() // 2, 660 - yukisaki.get_height() // 2))
+        canvas.blit(yukisaki, (1500 - yukisaki.get_width() // 2, 120 - yukisaki.get_height() // 2))
+        canvas.blit(yukisaki, (1500 - yukisaki.get_width() // 2, 660 - yukisaki.get_height() // 2))
 
         platform = syousai.render(txt_platform, True, COLOR_TEXT)
         canvas.blit(platform, (1826 - platform.get_width() // 2, 120 - platform.get_height() // 2))
@@ -179,7 +183,11 @@ def main():
 
         #1段目時刻
         text_time1 = main_font.render("16：53", True, YELLOW_TEXT)
-        canvas.blit(text_time1, (1135 - text_time1.get_width() // 2, 203 - text_time1.get_height() // 2))
+        canvas.blit(text_time1, (1140 - text_time1.get_width() // 2, 203 - text_time1.get_height() // 2))
+
+        #1段目行先
+        text_time1 = main_font.render(txt_fukui, True, COLOR_TEXT)
+        canvas.blit(text_time1, (1495 - text_time1.get_width() // 2, 203 - text_time1.get_height() // 2))
 
         #2段目種別
         text_surf2 = main_font.render(txt_local, True, COLOR_TEXT)
@@ -187,7 +195,7 @@ def main():
 
         #2段目時刻
         text_time2 = main_font.render("17：14", True, YELLOW_TEXT)
-        canvas.blit(text_time2, (1135 - text_time2.get_width() // 2, 338 - text_time2.get_height() // 2))
+        canvas.blit(text_time2, (1140 - text_time2.get_width() // 2, 338 - text_time2.get_height() // 2))
 
         #3段目種別
         text_surf3 = main_font.render(txt_local, True, COLOR_TEXT)
@@ -195,7 +203,7 @@ def main():
 
         #3段目時刻
         text_time3 = main_font.render("17：51", True, YELLOW_TEXT)
-        canvas.blit(text_time3, (1135 - text_time3.get_width() // 2, 473 - text_time3.get_height() // 2))
+        canvas.blit(text_time3, (1140 - text_time3.get_width() // 2, 473 - text_time3.get_height() // 2))
 
         #4段目種別
         text_surf4 = main_font.render(txt_local, True, COLOR_TEXT)
@@ -203,7 +211,7 @@ def main():
 
         #4段目時刻
         text_time4 = main_font.render("16：47", True, YELLOW_TEXT)
-        canvas.blit(text_time4, (1135 - text_time4.get_width() // 2, 744 - text_time4.get_height() // 2))
+        canvas.blit(text_time4, (1140 - text_time4.get_width() // 2, 744 - text_time4.get_height() // 2))
 
         #5段目種別
         text_surf5 = main_font.render(txt_local, True, COLOR_TEXT)
@@ -211,7 +219,7 @@ def main():
 
         #5段目時刻
         text_time5 = main_font.render("17：06", True, YELLOW_TEXT)
-        canvas.blit(text_time5, (1135 - text_time5.get_width() // 2, 879 - text_time5.get_height() // 2))
+        canvas.blit(text_time5, (1140 - text_time5.get_width() // 2, 879 - text_time5.get_height() // 2))
 
         #6段目種別
         text_surf6 = main_font.render(txt_local, True, COLOR_TEXT)
@@ -219,7 +227,7 @@ def main():
 
         #6段目時刻
         text_time6 = main_font.render("17：42", True, YELLOW_TEXT)
-        canvas.blit(text_time6, (1135 - text_time6.get_width() // 2, 1014 - text_time6.get_height() // 2))
+        canvas.blit(text_time6, (1140 - text_time6.get_width() // 2, 1014 - text_time6.get_height() // 2))
 
         #ケーリングと画面更新
         #キャンバスを現在のウィンドウサイズに合わせて転送
