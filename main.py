@@ -151,10 +151,10 @@ def main():
 
         #方面
         houmen = rosen1.render(txt_houmen1, True, COLOR_TEXT)
-        canvas.blit(houmen, (961, 51 - rosen.get_height() // 2))
+        canvas.blit(houmen, (965, 51 - rosen.get_height() // 2))
 
         houmen1 = rosen1.render(txt_houmen2, True, COLOR_TEXT)
-        canvas.blit(houmen1, (961, 591 - rosen.get_height() // 2))
+        canvas.blit(houmen1, (963, 591 - rosen.get_height() // 2))
 
         #詳細
         type = syousai.render(txt_time, True, COLOR_TEXT)
@@ -170,8 +170,8 @@ def main():
         canvas.blit(time, (1162 - time.get_width() // 2, 660 - time.get_height() // 2))
 
         yukisaki = syousai.render(txt_destination, True, COLOR_TEXT)
-        canvas.blit(yukisaki, (1500 - yukisaki.get_width() // 2, 120 - yukisaki.get_height() // 2))
-        canvas.blit(yukisaki, (1500 - yukisaki.get_width() // 2, 660 - yukisaki.get_height() // 2))
+        canvas.blit(yukisaki, (1480 - yukisaki.get_width() // 2, 120 - yukisaki.get_height() // 2))
+        canvas.blit(yukisaki, (1480 - yukisaki.get_width() // 2, 660 - yukisaki.get_height() // 2))
 
         platform = syousai.render(txt_platform, True, COLOR_TEXT)
         canvas.blit(platform, (1826 - platform.get_width() // 2, 120 - platform.get_height() // 2))
@@ -187,7 +187,7 @@ def main():
 
         #1段目行先
         text_destination1 = main_font.render(txt_fukui, True, COLOR_TEXT)
-        canvas.blit(text_destination1, (1495 - text_destination1.get_width() // 2, 203 - text_destination1.get_height() // 2))
+        canvas.blit(text_destination1, (1480 - text_destination1.get_width() // 2, 203 - text_destination1.get_height() // 2))
 
         #2段目種別
         text_surf2 = main_font.render(txt_local, True, COLOR_TEXT)
@@ -199,7 +199,7 @@ def main():
 
         #2段目行先
         text_destination2 = main_font.render(txt_fukui, True, COLOR_TEXT)
-        canvas.blit(text_destination2, (1495 - text_destination2.get_width() // 2, 338 - text_destination2.get_height() // 2))
+        canvas.blit(text_destination2, (1480 - text_destination2.get_width() // 2, 338 - text_destination2.get_height() // 2))
 
         #3段目種別
         text_surf3 = main_font.render(txt_local, True, COLOR_TEXT)
@@ -211,7 +211,7 @@ def main():
 
         #3段目行先
         text_destination3 = main_font.render(txt_fukui, True, COLOR_TEXT)
-        canvas.blit(text_destination3, (1495 - text_destination3.get_width() // 2, 473 - text_destination3.get_height() // 2))
+        canvas.blit(text_destination3, (1480 - text_destination3.get_width() // 2, 473 - text_destination3.get_height() // 2))
 
         #4段目種別
         text_surf4 = main_font.render(txt_local, True, COLOR_TEXT)
@@ -220,6 +220,10 @@ def main():
         #4段目時刻
         text_time4 = main_font.render("16：47", True, YELLOW_TEXT)
         canvas.blit(text_time4, (1140 - text_time4.get_width() // 2, 744 - text_time4.get_height() // 2))
+
+        #4段目行先
+        text_destination4 = main_font.render(txt_kanazawa, True, COLOR_TEXT)
+        canvas.blit(text_destination4, (1480 - text_destination4.get_width() // 2, 744 - text_destination4.get_height() // 2))
 
         #5段目種別
         text_surf5 = main_font.render(txt_local, True, COLOR_TEXT)
