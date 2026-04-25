@@ -237,6 +237,10 @@ def main():
         text_destination4 = main_font.render(txt_kanazawa, True, COLOR_TEXT)
         canvas.blit(text_destination4, (1480 - text_destination4.get_width() // 2, 744 - text_destination4.get_height() // 2))
 
+        #4段目のりば
+        text_platform4 = main_font.render("2", True, YELLOW_TEXT)
+        canvas.blit(text_platform4, (1920 - text_destination4.get_width() // 2, 744 - text_destination4.get_height() // 2))
+
         #5段目種別
         text_surf5 = main_font.render(txt_local, True, COLOR_TEXT)
         canvas.blit(text_surf5, (121 - text_surf5.get_width() // 2, 879 - text_surf5.get_height() // 2))
