@@ -209,6 +209,10 @@ def main():
         text_time3 = main_font.render("17：51", True, YELLOW_TEXT)
         canvas.blit(text_time3, (1140 - text_time3.get_width() // 2, 473 - text_time3.get_height() // 2))
 
+        #3段目行先
+        text_destination3 = main_font.render(txt_fukui, True, COLOR_TEXT)
+        canvas.blit(text_destination3, (1495 - text_destination3.get_width() // 2, 473 - text_destination3.get_height() // 2))
+
         #4段目種別
         text_surf4 = main_font.render(txt_local, True, COLOR_TEXT)
         canvas.blit(text_surf4, (121 - text_surf4.get_width() // 2, 744 - text_surf4.get_height() // 2))
