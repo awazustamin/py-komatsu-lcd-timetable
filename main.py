@@ -186,8 +186,8 @@ def main():
         canvas.blit(text_time1, (1140 - text_time1.get_width() // 2, 203 - text_time1.get_height() // 2))
 
         #1段目行先
-        text_time1 = main_font.render(txt_fukui, True, COLOR_TEXT)
-        canvas.blit(text_time1, (1495 - text_time1.get_width() // 2, 203 - text_time1.get_height() // 2))
+        text_destination1 = main_font.render(txt_fukui, True, COLOR_TEXT)
+        canvas.blit(text_destination1, (1495 - text_destination1.get_width() // 2, 203 - text_destination1.get_height() // 2))
 
         #2段目種別
         text_surf2 = main_font.render(txt_local, True, COLOR_TEXT)
@@ -196,6 +196,10 @@ def main():
         #2段目時刻
         text_time2 = main_font.render("17：14", True, YELLOW_TEXT)
         canvas.blit(text_time2, (1140 - text_time2.get_width() // 2, 338 - text_time2.get_height() // 2))
+
+        #2段目行先
+        text_destination2 = main_font.render(txt_fukui, True, COLOR_TEXT)
+        canvas.blit(text_destination2, (1495 - text_destination2.get_width() // 2, 338 - text_destination2.get_height() // 2))
 
         #3段目種別
         text_surf3 = main_font.render(txt_local, True, COLOR_TEXT)
