@@ -221,6 +221,10 @@ def main():
         text_destination3 = main_font.render(txt_fukui, True, COLOR_TEXT)
         canvas.blit(text_destination3, (1480 - text_destination3.get_width() // 2, 473 - text_destination3.get_height() // 2))
 
+        #3段目のりば
+        text_platform3 = main_font.render("3", True, YELLOW_TEXT)
+        canvas.blit(text_platform3, (1920 - text_destination3.get_width() // 2, 473 - text_destination3.get_height() // 2))
+
         #4段目種別
         text_surf4 = main_font.render(txt_local, True, COLOR_TEXT)
         canvas.blit(text_surf4, (121 - text_surf4.get_width() // 2, 744 - text_surf4.get_height() // 2))
