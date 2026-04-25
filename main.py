@@ -233,6 +233,10 @@ def main():
         text_time5 = main_font.render("17：06", True, YELLOW_TEXT)
         canvas.blit(text_time5, (1140 - text_time5.get_width() // 2, 879 - text_time5.get_height() // 2))
 
+        #5段目行先
+        text_destination5 = main_font.render(txt_kanazawa, True, COLOR_TEXT)
+        canvas.blit(text_destination5, (1480 - text_destination5.get_width() // 2, 879 - text_destination5.get_height() // 2))
+
         #6段目種別
         text_surf6 = main_font.render(txt_local, True, COLOR_TEXT)
         canvas.blit(text_surf6, (121 - text_surf6.get_width() // 2, 1014 - text_surf6.get_height() // 2))
@@ -240,6 +244,10 @@ def main():
         #6段目時刻
         text_time6 = main_font.render("17：42", True, YELLOW_TEXT)
         canvas.blit(text_time6, (1140 - text_time6.get_width() // 2, 1014 - text_time6.get_height() // 2))
+
+        #6段目行先
+        text_destination6 = main_font.render(txt_kanazawa, True, COLOR_TEXT)
+        canvas.blit(text_destination6, (1480 - text_destination6.get_width() // 2, 1014 - text_destination6.get_height() // 2))
 
         #ケーリングと画面更新
         #キャンバスを現在のウィンドウサイズに合わせて転送
