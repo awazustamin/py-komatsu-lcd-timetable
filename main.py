@@ -46,6 +46,7 @@ def main():
         #日英文面の定義
         if is_japanese:
             txt_local = "普通"
+            txt_rapid = "快速"
             txt_rosen = "IRいしかわ鉄道線"
             txt_houmen1 = "加賀温泉・福井方面"
             txt_houmen2 = "松任・金沢方面"
@@ -56,6 +57,7 @@ def main():
             txt_platform = "のりば"
         else:
             txt_local = "Local"
+            txt_rapid = "Rapid"
             txt_rosen = "Ishikawa Railway"
             txt_houmen1 = "for Kagaonsen, Fukui"
             txt_houmen2 = "for Mattō, Kanazawa"
