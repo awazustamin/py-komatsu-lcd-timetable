@@ -253,6 +253,10 @@ def main():
         text_destination5 = main_font.render(txt_kanazawa, True, COLOR_TEXT)
         canvas.blit(text_destination5, (1480 - text_destination5.get_width() // 2, 879 - text_destination5.get_height() // 2))
 
+        #5段目のりば
+        text_platform5 = main_font.render("1", True, YELLOW_TEXT)
+        canvas.blit(text_platform5, (1920 - text_destination5.get_width() // 2, 879 - text_destination5.get_height() // 2))
+
         #6段目種別
         text_surf6 = main_font.render(txt_local, True, COLOR_TEXT)
         canvas.blit(text_surf6, (121 - text_surf6.get_width() // 2, 1014 - text_surf6.get_height() // 2))
@@ -264,6 +268,10 @@ def main():
         #6段目行先
         text_destination6 = main_font.render(txt_kanazawa, True, COLOR_TEXT)
         canvas.blit(text_destination6, (1480 - text_destination6.get_width() // 2, 1014 - text_destination6.get_height() // 2))
+
+        #6段目のりば
+        text_platform6 = main_font.render("2", True, YELLOW_TEXT)
+        canvas.blit(text_platform6, (1920 - text_destination6.get_width() // 2, 1014 - text_destination6.get_height() // 2))
 
         #ケーリングと画面更新
         #キャンバスを現在のウィンドウサイズに合わせて転送
