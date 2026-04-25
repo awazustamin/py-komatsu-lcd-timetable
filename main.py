@@ -189,6 +189,10 @@ def main():
         text_destination1 = main_font.render(txt_fukui, True, COLOR_TEXT)
         canvas.blit(text_destination1, (1480 - text_destination1.get_width() // 2, 203 - text_destination1.get_height() // 2))
 
+        #1段目のりば
+        text_platform1 = main_font.render("3", True, YELLOW_TEXT)
+        canvas.blit(text_platform1, (1920 - text_destination1.get_width() // 2, 203 - text_destination1.get_height() // 2))
+
         #2段目種別
         text_surf2 = main_font.render(txt_local, True, COLOR_TEXT)
         canvas.blit(text_surf2, (121 - text_surf2.get_width() // 2, 338 - text_surf2.get_height() // 2))
@@ -200,6 +204,10 @@ def main():
         #2段目行先
         text_destination2 = main_font.render(txt_fukui, True, COLOR_TEXT)
         canvas.blit(text_destination2, (1480 - text_destination2.get_width() // 2, 338 - text_destination2.get_height() // 2))
+
+        #2段目のりば
+        text_platform2 = main_font.render("3", True, YELLOW_TEXT)
+        canvas.blit(text_platform2, (1920 - text_destination2.get_width() // 2, 338 - text_destination2.get_height() // 2))
 
         #3段目種別
         text_surf3 = main_font.render(txt_local, True, COLOR_TEXT)
