@@ -12,7 +12,7 @@ IRいしかわ鉄道小松駅改札内中2階のLCD発車標を Python / pygame 
 
 ---
 
-<img src="py-komatsu-lcd-timetable_screenshot.gif" width="50%">
+<img src="py-komatsu-lcd-timetable_screenshot.gif" width="60%">
 
 ## 必要環境
 
