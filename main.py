@@ -1,283 +1,195 @@
-from time import sleep
 import pygame
 import sys
+import json
+import requests
+import os
+from datetime import datetime, timezone, timedelta
 
-#サイズと初期表示倍率
+# サイズと初期表示倍率
 BASE_RES = (1920, 1080)
 INITIAL_SCALE = 0.5
 FONT_NAME = "meiryo"
 
-#色の定義
+# 色の定義
 COLOR_BG = (0, 0, 0)
 COLOR_TEXT = (255, 255, 255)
 YELLOW_TEXT = (255, 253, 157)
+COLOR_NORMAL = (0, 176, 80)   # 通常（緑）
+COLOR_KAISOKU = (255, 127, 0) # 快速（#ff7f00）
+
+API_URL = "https://www.ishikawa-railway.jp/api/v1/timetables/station/komatsu"
+JSON_FILE = "komatsu.json"
+
+# デバッグ用
+DEBUG_MODE = "--debug" in sys.argv
+debug_offset = 0
 
 def setup_display(width):
-    #横幅を基準に16:9のウィンドウを作成する
     height = int(width * (BASE_RES[1] / BASE_RES[0]))
     size = (width, height)
     screen = pygame.display.set_mode(size, pygame.RESIZABLE)
     return screen, size
 
-def main():
-    pygame.init()
+def fetch_api():
+    try:
+        response = requests.get(API_URL, timeout=10)
+        response.raise_for_status()
+        with open(JSON_FILE, 'w', encoding='utf-8') as f:
+            json.dump(response.json(), f, ensure_ascii=False, indent=4)
+    except:
+        pass
 
-    #初期ウィンドウとキャンバスの準備
+def get_train_list(offset_min=0):
+    if not os.path.exists(JSON_FILE):
+        return [{"time":"--：--","dest_jp":"----","dest_en":"","plat":"-","type_jp":"--","type_en":""}]*3, \
+               [{"time":"--：--","dest_jp":"----","dest_en":"","plat":"-","type_jp":"--","type_en":""}]*3
+
+    try:
+        with open(JSON_FILE, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+        
+        JST = timezone(timedelta(hours=+9))
+        now = datetime.now(JST) + timedelta(minutes=offset_min)
+        now_str = now.strftime("%H:%M")
+        
+        f_res, k_res = [], []
+        for d in data['directions']:
+            is_f = "福井" in d['name']
+            trains = []
+            for entry in d['timetables']:
+                for t in entry['diagrams']:
+                    raw_time = t['departure_time']
+                    if raw_time.zfill(5) < now_str: continue
+                    
+                    # 時刻の整形
+                    h, m = raw_time.split(":")
+                    # 幅を維持するために数字用空白(\u2007)を使用
+                    h_str = f"{int(h):2}".replace(" ", "\u2007")
+                    display_time = f"{h_str}：{m.zfill(2)}"
+                    
+                    dest = t['arrival_station_name']
+                    if len(dest) == 2: dest = f"{dest[0]}　{dest[1]}"
+
+                    trains.append({
+                        "sort_key": raw_time.zfill(5),
+                        "time": display_time,
+                        "dest_jp": dest,
+                        "dest_en": t['arrival_station_name_en'],
+                        "plat": str(t.get('platform') or ("3" if is_f else "1")),
+                        "type_jp": t['train_type_name'] or "普通",
+                        "type_en": t['train_type_name_en'] or "Local"
+                    })
+            
+            sorted_t = sorted(trains, key=lambda x: x['sort_key'])[:3]
+            while len(sorted_t) < 3:
+                # 空き枠も幅を維持
+                empty_time = "\u2007 \u2007：\u2007 \u2007"
+                sorted_t.append({"time":empty_time,"dest_jp":"      ","dest_en":"","plat":" ","type_jp":"    ","type_en":""})
+            
+            if is_f: f_res = sorted_t
+            else: k_res = sorted_t
+        return f_res, k_res
+    except:
+        return [{"time":"--：--","dest_jp":"----","dest_en":"","plat":"-","type_jp":"--","type_en":""}]*3, \
+               [{"time":"--：--","dest_jp":"----","dest_en":"","plat":"-","type_jp":"--","type_en":""}]*3
+
+def main():
+    global debug_offset
+    pygame.init()
     current_w = int(BASE_RES[0] * INITIAL_SCALE)
     screen, win_size = setup_display(current_w)
     pygame.display.set_caption("")
 
     canvas = pygame.Surface(BASE_RES)
-    
-    #リソースの読み込み
-    title_font = pygame.font.SysFont(FONT_NAME, 80, bold=True)
     clock = pygame.time.Clock()
 
-    CYCLE_MS = 12000 
-    JP_DURATION = 8000
+    fetch_api()
+    f_list, k_list = get_train_list(debug_offset)
+    last_update = pygame.time.get_ticks()
 
-    #メインループ
     while True:
+        now_ticks = pygame.time.get_ticks()
+        if now_ticks - last_update > 3600000:
+            fetch_api()
+            f_list, k_list = get_train_list(debug_offset)
+            last_update = now_ticks
 
-        #現在のサイクル内の時間を計算
-        current_time = pygame.time.get_ticks() % CYCLE_MS
-        is_japanese = current_time < JP_DURATION
+        current_time_cycle = now_ticks % 12000
+        is_japanese = current_time_cycle < 8000
 
-        #日英文面の定義
         if is_japanese:
-            txt_local = "普通"
-            txt_rapid = "快速"
-            txt_rosen = "IRいしかわ鉄道線"
-            txt_houmen1 = "加賀温泉・福井方面"
-            txt_houmen2 = "松任・金沢方面"
-            txt_type = "種別"
-            txt_delay = "列車名／遅れ"
-            txt_time = "時刻"
-            txt_destination = "行先"
-            txt_platform = "のりば"
-            txt_kanazawa = "金　沢"
-            txt_fukui = "福　井"
+            txt_rosen, txt_houmen1, txt_houmen2 = "IRいしかわ鉄道線", "加賀温泉・福井方面", "松任・金沢方面"
+            txt_delay, txt_time, txt_destination, txt_platform = "列車名／遅れ", "時刻", "行先", "のりば"
         else:
-            txt_local = "Local"
-            txt_rapid = "Rapid"
-            txt_rosen = "Ishikawa Railway"
-            txt_houmen1 = "for Kagaonsen, Fukui"
-            txt_houmen2 = "for Mattō, Kanazawa"
-            txt_type = "Type"
-            txt_delay = "Train Name/Delay"
-            txt_time = "Departure Time"
-            txt_destination = "Destination"
-            txt_platform = "Platform"
-            txt_kanazawa = "Kanazawa"
-            txt_fukui = "Fukui"
+            txt_rosen, txt_houmen1, txt_houmen2 = "Ishikawa Railway", "for Kagaonsen, Fukui", "for Mattō, Kanazawa"
+            txt_delay, txt_time, txt_destination, txt_platform = "Train Name/Delay", "Departure Time", "Destination", "Platform"
 
-
-
-        #種別の色定義
-        color_syubetsu = (0, 176, 80)
-
-        #イベント処理
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-            
+                pygame.quit(); sys.exit()
             elif event.type == pygame.VIDEORESIZE:
-                #リサイズ時にアスペクト比を維持して再生成
                 screen, win_size = setup_display(event.w)
+            elif event.type == pygame.KEYDOWN and DEBUG_MODE:
+                if event.key == pygame.K_b: debug_offset += 10
+                elif event.key == pygame.K_n: debug_offset += 60
+                elif event.key == pygame.K_g: debug_offset -= 10
+                elif event.key == pygame.K_h: debug_offset -= 60
+                f_list, k_list = get_train_list(debug_offset)
 
-        #描画処理（1920x1080のキャンバスに対して行う）
         canvas.fill(COLOR_BG)
-        
-        #pygame.draw.rect(描画先, 色, (x, y, 幅, 高さ))
 
-        #方面を表示するところの図形
+        # 背景ヘッダー
         pygame.draw.rect(canvas, (53, 58, 65), (0, 0, 1920, 102))
-
-        #種別等が書いてあるところのバーの図形
         pygame.draw.rect(canvas, (53, 58, 65), (0, 104, 1920, 32))
-
-        #1段目種別の図形の枠
-        pygame.draw.rect(canvas, (255, 255, 255), (0, 136, 242, 135))
-
-        #1段目種別の図形
-        pygame.draw.rect(canvas, color_syubetsu, (3, 139, 236, 129))
-
-        #2段目種別の図形の枠
-        pygame.draw.rect(canvas, (255, 255, 255), (0, 271, 242, 135))
-
-        #2段目種別の図形
-        pygame.draw.rect(canvas, color_syubetsu, (3, 274, 236, 129))
-
-        #3段目種別の図形の枠
-        pygame.draw.rect(canvas, (255, 255, 255), (0, 406, 242, 135))
-
-        #3段目種別の図形
-        pygame.draw.rect(canvas, (0, 176, 80), (3, 409, 236, 129))
-
-        #方面を表示するところの図形
         pygame.draw.rect(canvas, (53, 58, 65), (0, 540, 1920, 102))
-
-        #種別等が書いてあるところのバーの図形
         pygame.draw.rect(canvas, (53, 58, 65), (0, 644, 1920, 32))
 
-        #4段目種別の図形の枠
-        pygame.draw.rect(canvas, (255, 255, 255), (0, 677, 242, 135))
+        main_font = pygame.font.SysFont(FONT_NAME, 80)
+        rosen_f = pygame.font.SysFont(FONT_NAME, 68)
+        syousai_f = pygame.font.SysFont(FONT_NAME, 19)
 
-        #4段目種別の図形
-        pygame.draw.rect(canvas, color_syubetsu, (3, 680, 236, 129))
+        # 路線・方面
+        r_s = rosen_f.render(txt_rosen, True, COLOR_TEXT)
+        canvas.blit(r_s, (53, 51 - r_s.get_height() // 2))
+        canvas.blit(r_s, (53, 591 - r_s.get_height() // 2))
+        h1 = rosen_f.render(txt_houmen1, True, COLOR_TEXT); canvas.blit(h1, (965, 51 - r_s.get_height() // 2))
+        h2 = rosen_f.render(txt_houmen2, True, COLOR_TEXT); canvas.blit(h2, (963, 591 - r_s.get_height() // 2))
 
-        #5段目種別の図形の枠
-        pygame.draw.rect(canvas, (255, 255, 255), (0, 812, 242, 135))
+        # ヘッダーテキスト
+        for by in [120, 660]:
+            for tx, px in [(txt_time, 117), (txt_delay, 598), (txt_time, 1162), (txt_destination, 1480), (txt_platform, 1826)]:
+                s = syousai_f.render(tx, True, COLOR_TEXT)
+                canvas.blit(s, (px - s.get_width() // 2, by - s.get_height() // 2))
 
-        #5段目種別の図形
-        pygame.draw.rect(canvas, color_syubetsu, (3, 815, 236, 129))
+        # 列車データ描画
+        for i in range(3):
+            for lst, y_base, y_rect_base in [(f_list, [203, 338, 473], [136, 271, 406]), 
+                                             (k_list, [744, 879, 1014], [677, 812, 947])]:
+                train = lst[i]
+                yc = y_base[i]
+                yr = y_rect_base[i]
 
-        #6段目種別の図形の枠
-        pygame.draw.rect(canvas, (255, 255, 255), (0, 947, 242, 135))
+                # 快速判定による背景色変更 (#ff7f00)
+                current_rect_color = COLOR_KAISOKU if train["type_jp"] == "快速" else COLOR_NORMAL
+                
+                pygame.draw.rect(canvas, (255, 255, 255), (0, yr, 242, 135))
+                pygame.draw.rect(canvas, current_rect_color, (3, yr + 3, 236, 129))
 
-        #6段目種別の図形
-        pygame.draw.rect(canvas, color_syubetsu, (3, 950, 236, 129))
+                # 描画 (121, 1140, 1480, 1825 の座標は完全維持)
+                s_s = main_font.render(train["type_jp"] if is_japanese else train["type_en"], True, COLOR_TEXT)
+                canvas.blit(s_s, (121 - s_s.get_width() // 2, yc - s_s.get_height() // 2))
+                
+                # 時刻 (特殊空白により「：」の位置は常に固定)
+                t_s = main_font.render(train["time"], True, YELLOW_TEXT)
+                canvas.blit(t_s, (1140 - t_s.get_width() // 2, yc - t_s.get_height() // 2))
+                
+                d_s = main_font.render(train["dest_jp"] if is_japanese else train["dest_en"], True, COLOR_TEXT)
+                canvas.blit(d_s, (1480 - d_s.get_width() // 2, yc - d_s.get_height() // 2))
+                
+                p_s = main_font.render(train["plat"], True, YELLOW_TEXT)
+                canvas.blit(p_s, (1825 - p_s.get_width() // 2, yc - p_s.get_height() // 2))
 
-        #フォント設定
-        main_font = pygame.font.SysFont(FONT_NAME, 80, bold=False)
-        rosen1 = pygame.font.SysFont(FONT_NAME, 68, bold=False)
-        syousai = pygame.font.SysFont(FONT_NAME, 19, bold=False)
-
-        #路線名
-        rosen = rosen1.render(txt_rosen, True, COLOR_TEXT)
-        canvas.blit(rosen, (53, 51 - rosen.get_height() // 2))
-        canvas.blit(rosen, (53, 591 - rosen.get_height() // 2))
-
-        #方面
-        houmen = rosen1.render(txt_houmen1, True, COLOR_TEXT)
-        canvas.blit(houmen, (965, 51 - rosen.get_height() // 2))
-
-        houmen1 = rosen1.render(txt_houmen2, True, COLOR_TEXT)
-        canvas.blit(houmen1, (963, 591 - rosen.get_height() // 2))
-
-        #詳細
-        type = syousai.render(txt_time, True, COLOR_TEXT)
-        canvas.blit(type, (117 - type.get_width() // 2, 120 - type.get_height() // 2))
-        canvas.blit(type, (117 - type.get_width() // 2, 660 - type.get_height() // 2))
-
-        delay = syousai.render(txt_delay, True, COLOR_TEXT)
-        canvas.blit(delay, (598 - delay.get_width() // 2, 120 - delay.get_height() // 2))
-        canvas.blit(delay, (598 - delay.get_width() // 2, 660 - delay.get_height() // 2))
-
-        time = syousai.render(txt_time, True, COLOR_TEXT)
-        canvas.blit(time, (1162 - time.get_width() // 2, 120 - time.get_height() // 2))
-        canvas.blit(time, (1162 - time.get_width() // 2, 660 - time.get_height() // 2))
-
-        yukisaki = syousai.render(txt_destination, True, COLOR_TEXT)
-        canvas.blit(yukisaki, (1480 - yukisaki.get_width() // 2, 120 - yukisaki.get_height() // 2))
-        canvas.blit(yukisaki, (1480 - yukisaki.get_width() // 2, 660 - yukisaki.get_height() // 2))
-
-        platform = syousai.render(txt_platform, True, COLOR_TEXT)
-        canvas.blit(platform, (1826 - platform.get_width() // 2, 120 - platform.get_height() // 2))
-        canvas.blit(platform, (1826 - platform.get_width() // 2, 660 - platform.get_height() // 2))
-
-        #1段目種別
-        text_surf1 = main_font.render(txt_local, True, COLOR_TEXT)
-        canvas.blit(text_surf1, (121 - text_surf1.get_width() // 2, 203 - text_surf1.get_height() // 2))
-
-        #1段目時刻
-        text_time1 = main_font.render("16：53", True, YELLOW_TEXT)
-        canvas.blit(text_time1, (1140 - text_time1.get_width() // 2, 203 - text_time1.get_height() // 2))
-
-        #1段目行先
-        text_destination1 = main_font.render(txt_fukui, True, COLOR_TEXT)
-        canvas.blit(text_destination1, (1480 - text_destination1.get_width() // 2, 203 - text_destination1.get_height() // 2))
-
-        #1段目のりば
-        text_platform1 = main_font.render("3", True, YELLOW_TEXT)
-        canvas.blit(text_platform1, (1825 - text_platform1.get_width() // 2, 203 - text_platform1.get_height() // 2))
-
-        #2段目種別
-        text_surf2 = main_font.render(txt_local, True, COLOR_TEXT)
-        canvas.blit(text_surf2, (121 - text_surf2.get_width() // 2, 338 - text_surf2.get_height() // 2))
-
-        #2段目時刻
-        text_time2 = main_font.render("17：14", True, YELLOW_TEXT)
-        canvas.blit(text_time2, (1140 - text_time2.get_width() // 2, 338 - text_time2.get_height() // 2))
-
-        #2段目行先
-        text_destination2 = main_font.render(txt_fukui, True, COLOR_TEXT)
-        canvas.blit(text_destination2, (1480 - text_destination2.get_width() // 2, 338 - text_destination2.get_height() // 2))
-
-        #2段目のりば
-        text_platform2 = main_font.render("3", True, YELLOW_TEXT)
-        canvas.blit(text_platform2, (1825 - text_platform2.get_width() // 2, 338 - text_platform2.get_height() // 2))
-
-        #3段目種別
-        text_surf3 = main_font.render(txt_local, True, COLOR_TEXT)
-        canvas.blit(text_surf3, (121 - text_surf3.get_width() // 2, 473 - text_surf3.get_height() // 2))
-
-        #3段目時刻
-        text_time3 = main_font.render("17：51", True, YELLOW_TEXT)
-        canvas.blit(text_time3, (1140 - text_time3.get_width() // 2, 473 - text_time3.get_height() // 2))
-
-        #3段目行先
-        text_destination3 = main_font.render(txt_fukui, True, COLOR_TEXT)
-        canvas.blit(text_destination3, (1480 - text_destination3.get_width() // 2, 473 - text_destination3.get_height() // 2))
-
-        #3段目のりば
-        text_platform3 = main_font.render("3", True, YELLOW_TEXT)
-        canvas.blit(text_platform3, (1825 - text_platform3.get_width() // 2, 473 - text_platform3.get_height() // 2))
-
-        #4段目種別
-        text_surf4 = main_font.render(txt_local, True, COLOR_TEXT)
-        canvas.blit(text_surf4, (121 - text_surf4.get_width() // 2, 744 - text_surf4.get_height() // 2))
-
-        #4段目時刻
-        text_time4 = main_font.render("16：47", True, YELLOW_TEXT)
-        canvas.blit(text_time4, (1140 - text_time4.get_width() // 2, 744 - text_time4.get_height() // 2))
-
-        #4段目行先
-        text_destination4 = main_font.render(txt_kanazawa, True, COLOR_TEXT)
-        canvas.blit(text_destination4, (1480 - text_destination4.get_width() // 2, 744 - text_destination4.get_height() // 2))
-
-        #4段目のりば
-        text_platform4 = main_font.render("2", True, YELLOW_TEXT)
-        canvas.blit(text_platform4, (1825 - text_platform4.get_width() // 2, 744 - text_platform4.get_height() // 2))
-
-        #5段目種別
-        text_surf5 = main_font.render(txt_local, True, COLOR_TEXT)
-        canvas.blit(text_surf5, (121 - text_surf5.get_width() // 2, 879 - text_surf5.get_height() // 2))
-
-        #5段目時刻
-        text_time5 = main_font.render("17：06", True, YELLOW_TEXT)
-        canvas.blit(text_time5, (1140 - text_time5.get_width() // 2, 879 - text_time5.get_height() // 2))
-
-        #5段目行先
-        text_destination5 = main_font.render(txt_kanazawa, True, COLOR_TEXT)
-        canvas.blit(text_destination5, (1480 - text_destination5.get_width() // 2, 879 - text_destination5.get_height() // 2))
-
-        #5段目のりば
-        text_platform5 = main_font.render("1", True, YELLOW_TEXT)
-        canvas.blit(text_platform5, (1825 - text_platform5.get_width() // 2, 879 - text_platform5.get_height() // 2))
-
-        #6段目種別
-        text_surf6 = main_font.render(txt_local, True, COLOR_TEXT)
-        canvas.blit(text_surf6, (121 - text_surf6.get_width() // 2, 1014 - text_surf6.get_height() // 2))
-
-        #6段目時刻
-        text_time6 = main_font.render("17：42", True, YELLOW_TEXT)
-        canvas.blit(text_time6, (1140 - text_time6.get_width() // 2, 1014 - text_time6.get_height() // 2))
-
-        #6段目行先
-        text_destination6 = main_font.render(txt_kanazawa, True, COLOR_TEXT)
-        canvas.blit(text_destination6, (1480 - text_destination6.get_width() // 2, 1014 - text_destination6.get_height() // 2))
-
-        #6段目のりば
-        text_platform6 = main_font.render("2", True, YELLOW_TEXT)
-        canvas.blit(text_platform6, (1825 - text_platform6.get_width() // 2, 1014 - text_platform6.get_height() // 2))
-
-        #ケーリングと画面更新
-        #キャンバスを現在のウィンドウサイズに合わせて転送
-        scaled_frame = pygame.transform.smoothscale(canvas, win_size)
-        screen.blit(scaled_frame, (0, 0))
-        
+        screen.blit(pygame.transform.smoothscale(canvas, win_size), (0, 0))
         pygame.display.flip()
         clock.tick(60)
 
