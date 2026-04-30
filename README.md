@@ -4,11 +4,8 @@ IRいしかわ鉄道小松駅改札内中2階のLCD発車標を Python / pygame 
 
 ![Python](https://img.shields.io/badge/Python-3.x-blue?logo=python)
 ![pygame](https://img.shields.io/badge/pygame-2.x-green?logo=python)
+![Requests](https://img.shields.io/badge/Requests-2.x-blue?logo=python)
 ![License](https://img.shields.io/badge/license-MIT-yellow)
-
-> [!WARNING]
-> **現在は静的データのみ対応しています。**
-> リアルタイムのダイヤ取得・自動更新機能は未実装です。時刻・行先・のりばを変更するにはソースコードを直接編集してください。
 
 ---
 
@@ -20,6 +17,7 @@ IRいしかわ鉄道小松駅改札内中2階のLCD発車標を Python / pygame 
 |------|-----------|
 | Python | 3.x |
 | pygame | 最新推奨 |
+| Requests | 最新推奨 |
 | OS | Windows, *nix |
 | フォント | メイリオ |
 
@@ -37,21 +35,21 @@ pip install -r requirements.txt
 python main.py
 ```
 
-起動するとウィンドウが開き、発車標が表示されます。
+起動するとウィンドウが開き、発車標が表示されます。   
+また、--debugオプションを追加すると時刻の変更ができます。   
 
 | 操作 | 動作 |
 |------|------|
 | ウィンドウリサイズ | 16:9 を維持してスケーリング |
 | ウィンドウを閉じる | アプリ終了 |
+| Bキー | 時間を10分送る |
+| Gキー | 時間を10分戻す |
+| Nキー | 時間を60分送る |
+| Hキー | 時間を60分戻す |
 
 ### 時刻・行先・のりばを変更する
+現在は時刻等の編集ができません。今後のアップデートで任意のjsonファイルを読み込み変更可能にする予定です。
 
-現在はデータが `main.py` にハードコードされています。変更したい場合は該当箇所を直接編集してください。
-
-```python
-# 例: 1段目の時刻を変更する
-text_time1 = main_font.render("16：53", True, YELLOW_TEXT)  # ← 時刻文字列を書き換える
-```
 
 ## ライセンス
 
