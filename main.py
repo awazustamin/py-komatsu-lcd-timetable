@@ -13,9 +13,9 @@ FONT_NAME = "meiryo"
 # 色の定義
 COLOR_BG = (0, 0, 0)
 COLOR_TEXT = (255, 255, 255)
-YELLOW_TEXT = (255, 253, 157)
-COLOR_NORMAL = (0, 176, 80)   # 通常（緑）
-COLOR_KAISOKU = (255, 127, 0) # 快速（#ff7f00）
+YELLOW_TEXT = (246, 255, 224)
+COLOR_NORMAL = (83, 188, 97)
+COLOR_KAISOKU = (245, 198, 74)
 
 API_URL = "https://www.ishikawa-railway.jp/api/v1/timetables/station/komatsu"
 JSON_FILE = "komatsu.json"
