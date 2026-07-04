@@ -1,5 +1,6 @@
 import pygame
 import sys
+import argparse
 import json
 import requests
 import os
@@ -20,9 +21,29 @@ COLOR_KAISOKU = (245, 198, 74)
 API_URL = "https://www.ishikawa-railway.jp/api/v1/timetables/station/komatsu"
 JSON_FILE = "komatsu.json"
 
-# デバッグ用
-DEBUG_MODE = "--debug" in sys.argv
+parser = argparse.ArgumentParser(
+    description="IRいしかわ鉄道 小松駅LCD発車標"
+)
+
+parser.add_argument(
+    "--debug",
+    action="store_true",
+    help="デバッグモードを有効にする"
+)
+
+parser.add_argument(
+    "--file",
+    default="komatsu.json",
+    metavar="FILE",
+    help="読み込むJSONファイルを指定します（デフォルト: komatsu.json）"
+)
+
+args = parser.parse_args()
+
 debug_offset = 0
+
+DEBUG_MODE = args.debug
+JSON_FILE = args.file
 
 def setup_display(width):
     height = int(width * (BASE_RES[1] / BASE_RES[0]))
@@ -129,14 +150,18 @@ def main():
     canvas = pygame.Surface(BASE_RES)
     clock = pygame.time.Clock()
 
-    fetch_api()
+    if JSON_FILE == "komatsu.json":
+        fetch_api()
+
     f_list, k_list = get_train_list(debug_offset)
     last_update = pygame.time.get_ticks()
 
     while True:
         now_ticks = pygame.time.get_ticks()
         if now_ticks - last_update > 3600000:
-            fetch_api()
+            if JSON_FILE == "komatsu.json":
+                fetch_api()
+
             f_list, k_list = get_train_list(debug_offset)
             last_update = now_ticks
 
