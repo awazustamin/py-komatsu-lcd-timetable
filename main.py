@@ -47,30 +47,33 @@ def get_train_list(offset_min=0):
     try:
         with open(JSON_FILE, 'r', encoding='utf-8') as f:
             data = json.load(f)
-        
+
         JST = timezone(timedelta(hours=+9))
         now = datetime.now(JST) + timedelta(minutes=offset_min)
         now_str = now.strftime("%H:%M")
-        
+
         f_res, k_res = [], []
+
         for d in data['directions']:
             is_f = "福井" in d['name']
+
             trains = []
+            old_trains = []
+
             for entry in d['timetables']:
                 for t in entry['diagrams']:
                     raw_time = t['departure_time']
-                    if raw_time.zfill(5) < now_str: continue
-                    
+
                     # 時刻の整形
                     h, m = raw_time.split(":")
-                    # 幅を維持するために数字用空白(\u2007)を使用
                     h_str = f"{int(h):2}".replace(" ", "\u2007")
                     display_time = f"{h_str}：{m.zfill(2)}"
-                    
-                    dest = t['arrival_station_name']
-                    if len(dest) == 2: dest = f"{dest[0]}　{dest[1]}"
 
-                    trains.append({
+                    dest = t['arrival_station_name']
+                    if len(dest) == 2:
+                        dest = f"{dest[0]}　{dest[1]}"
+
+                    train = {
                         "sort_key": raw_time.zfill(5),
                         "time": display_time,
                         "dest_jp": dest,
@@ -78,17 +81,40 @@ def get_train_list(offset_min=0):
                         "plat": str(t.get('platform') or ("3" if is_f else "1")),
                         "type_jp": t['train_type_name'] or "普通",
                         "type_en": t['train_type_name_en'] or "Local"
-                    })
-            
-            sorted_t = sorted(trains, key=lambda x: x['sort_key'])[:3]
+                    }
+
+                    if raw_time.zfill(5) >= now_str:
+                        trains.append(train)
+                    else:
+                        old_trains.append(train)
+
+            trains = sorted(trains, key=lambda x: x['sort_key'])
+
+            # 3本未満なら始発から補充
+            if len(trains) < 3:
+                old_trains = sorted(old_trains, key=lambda x: x['sort_key'])
+                trains.extend(old_trains[:3 - len(trains)])
+
+            sorted_t = trains[:3]
+
             while len(sorted_t) < 3:
-                # 空き枠も幅を維持
                 empty_time = "\u2007 \u2007：\u2007 \u2007"
-                sorted_t.append({"time":empty_time,"dest_jp":"      ","dest_en":"","plat":" ","type_jp":"    ","type_en":""})
-            
-            if is_f: f_res = sorted_t
-            else: k_res = sorted_t
+                sorted_t.append({
+                    "time": empty_time,
+                    "dest_jp": "      ",
+                    "dest_en": "",
+                    "plat": " ",
+                    "type_jp": "    ",
+                    "type_en": ""
+                })
+
+            if is_f:
+                f_res = sorted_t
+            else:
+                k_res = sorted_t
+
         return f_res, k_res
+
     except:
         return [{"time":"--：--","dest_jp":"----","dest_en":"","plat":"-","type_jp":"--","type_en":""}]*3, \
                [{"time":"--：--","dest_jp":"----","dest_en":"","plat":"-","type_jp":"--","type_en":""}]*3
